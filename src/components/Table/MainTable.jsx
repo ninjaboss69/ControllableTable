@@ -101,7 +101,7 @@ const MainTable = ({ currentPage, pageRow }) => {
   }, [Math.ceil(window.innerWidth / 250)]);
 
   useEffect(() => {
-    if (keys.length === 0) setKeys(Object.keys(users[0] || {}));
+    if (keys.length === 0) setKeys(Object.keys(users[0] || {})); 
     setRowUsers(users);
   }, [users]);
 
