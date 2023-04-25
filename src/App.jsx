@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { array } from "./data";
 import TreeDiagram from "./components/Tree/TreeDiagram";
+import Main from "./components/Map/Main";
+import GraphDiagram from "./components/Graph/Graph";
 // import { Users } from "./data";
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
           element={<ControllableTable pageRow={10} array={array} />}
         />
         <Route path="/tree" element={<TreeDiagram />} />
+        <Route path="/map" element={<Main />} />
+        <Route path="graph" element={<GraphDiagram />} />
       </Routes>
     </BrowserRouter>
   );

@@ -84,17 +84,16 @@ export const treeReducer = (state = INITIAL_STATE, action) => {
     }
 
     case TREE_ACTIONS_TYPE.DELETE_NEW_NODE: {
-      console.log("Node To Delete");
-      console.log(payload);
       // Deleting The Most Parent Node
-      if (payload === state.tree_data.id) {
-        console.log("Most Parent Node");
-        console.log(payload);
+      if (
+        payload === state.tree_data.id ||
+        payload === "undefined ( id : undefined)"
+      ) {
         return { ...state, tree_data: {} };
       }
       // Other Cases
       deleteNode(payload, state);
-      console.log(state);
+
       return { ...state, tree_data: { ...state.tree_data } };
     }
 

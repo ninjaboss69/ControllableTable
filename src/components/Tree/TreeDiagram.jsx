@@ -150,13 +150,13 @@ const TreeDiagram = () => {
       <div id="treeWrapper" className=" w-full h-[100vh]">
         <Tree
           data={treeChart}
-          renderCustomNodeElement={renderRectSvgNode}
+          // renderCustomNodeElement={renderRectSvgNode}
           rootNodeClassName="node__root"
           branchNodeClassName="node__branch"
+          leafNodeClassName="node__leaf"
           orientation="vertical"
           pathFunc="straight"
           translate={{ x: 450, y: 100 }}
-          leafNodeClassName="node__leaf"
           transitionDuration={1000}
           centeringTransitionDuration={800}
           zoom={5}
