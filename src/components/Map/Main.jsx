@@ -29,7 +29,7 @@ const Main = () => {
     () => ({
       disableDefaultUI: false,
       clickableIcons: false,
-      mapId: "5fce16cb83b6e305",
+      mapId: "b181cac70f27f5e6",
     }),
     []
   );
@@ -71,10 +71,35 @@ const Main = () => {
   }, [office]);
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78",
+    // googleMapsApiKey: "AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78",
     libraries: ["places"],
   });
 
+  useEffect(() => {
+    // const geocoder = new google.maps.Geocoder(); // eslint-disable-line
+    // geocoder
+    //   .geocode({
+    //     location: { lat: 43, lng: -80 },
+    //   })
+    //   .then((response) => console.log(response));
+  }, []);
+
+  const checkSearOrNot = () => {
+    const geocoder = new google.maps.Geocoder(); // eslint-disable-line
+
+    return geocoder
+      .geocode({
+        location: { lat: 43, lng: -80 },
+      })
+      .then((response) => {
+        if (response?.length >= 1) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error) => false);
+  };
   // const markerList = [
   //   { lat: 43, lng: -80 },
   //   { lat: 43, lng: -90 },
@@ -195,7 +220,7 @@ const Main = () => {
                         position={house}
                         clusterer={clusterer}
                         animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                        icon={assets.business}
+                        icon={"https://robohash.org/sailaminoak.png?size=50x50"}
                         onClick={() => {
                           // fetchDirections(house);
                         }}
@@ -206,7 +231,7 @@ const Main = () => {
                         position={house}
                         clusterer={clusterer}
                         animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                        icon={assets.house}
+                        icon={"https://robohash.org/sailamin.png?size=50x50"}
                         onClick={() => {
                           // fetchDirections(house);
                         }}
@@ -239,27 +264,6 @@ const Main = () => {
             ))}
           </>
         )}
-        {mapLoaded &&
-          office &&
-          latLngLines.map((position) => {
-            console.log("rendering polyline");
-            return (
-              <Polyline
-                key={position[0].lat}
-                path={position}
-                options={{
-                  strokeColor: "#ff2343",
-                  strokeOpacity: "1.0",
-                  strokeWeight: 2,
-                }}
-                onLoad={() => {
-                  console.log("Polyline Already Loaded");
-                  console.log(mapRef.current);
-                }}
-              />
-            );
-          })}
-        {console.log(mapLoaded)}
       </GoogleMap>
     </div>
   );
