@@ -14,10 +14,12 @@ import {
   MarkerClusterer,
   DirectionsRenderer,
   Polyline,
+  InfoWindow,
 } from "@react-google-maps/api";
 import "./globals.css";
 import Places from "./places";
 import { assets } from "../../assets";
+import { current } from "@reduxjs/toolkit";
 
 const Main = () => {
   const center = useMemo(() => ({ lat: 20.7855, lng: 97.036339 }), []);
@@ -42,6 +44,7 @@ const Main = () => {
     return mapRef.current;
   }, []);
   const [office, setOffice] = useState();
+  const [showInfoWindow, setShowInfoWindow] = useState(false);
   const [latLngLines, setLatLngLines] = useState([
     [
       { lat: 20.7855, lng: 97.036339 },
@@ -71,7 +74,7 @@ const Main = () => {
   }, [office]);
 
   const { isLoaded } = useLoadScript({
-    // googleMapsApiKey: "AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78",
+    googleMapsApiKey: "Your Key",
     libraries: ["places"],
   });
 
@@ -84,22 +87,64 @@ const Main = () => {
     //   .then((response) => console.log(response));
   }, []);
 
-  const checkSearOrNot = () => {
+  const [markerList, setMarkerList] = useState([]);
+
+  const checkSearOrNot = async ({ lat, lng }) => {
     const geocoder = new google.maps.Geocoder(); // eslint-disable-line
 
-    return geocoder
+    return await geocoder
       .geocode({
-        location: { lat: 43, lng: -80 },
+        location: { lat, lng },
       })
       .then((response) => {
-        if (response?.length >= 1) {
-          return true;
-        } else {
-          return false;
-        }
+        console.log(response);
       })
-      .catch((error) => false);
+      .catch((error) => console.log(error));
   };
+  function generateRandomInteger(min, max) {
+    return Math.floor(min + Math.random() * (max - min + 1));
+  }
+
+  // const spreadAlgorithm = ({ lat, lng }) => {
+  //   // checkSearOrNot({ lat, lng });
+  //   const spreadDistance = Math.random() - 0.5;
+  //   const currentArray = [
+  //     { lat: lat + spreadDistance, lng: lng + spreadDistance },
+  //     { lat: lat, lng: lng + spreadDistance },
+  //     { lat: lat + spreadDistance, lng: lng },
+  //     { lat: lat - spreadDistance, lng: lng - spreadDistance },
+  //     { lat: lat - spreadDistance, lng: lng },
+  //     { lat: lat, lng: lng - spreadDistance },
+  //   ];
+  //   setMarkerList([...markerList, ...currentArray]);
+  //   setTimeout(() => {
+  //     let chosenOne =
+  //       markerList[generateRandomInteger(0, markerList.length - 1)];
+
+  //     console.log(chosenOne);
+  //     if (chosenOne === undefined) {
+  //       chosenOne =
+  //         currentArray[generateRandomInteger(0, currentArray.length - 1)];
+  //     }
+  //     const plusOrMinus = Math.random() < 0.5;
+  //     let latt;
+  //     let lngg;
+  //     if (plusOrMinus) {
+  //       latt = chosenOne.lat + Math.random();
+  //       lngg = chosenOne.lng - Math.random();
+  //     } else {
+  //       latt = chosenOne.lat - Math.random();
+  //       lngg = chosenOne.lng + Math.random();
+  //     }
+  //     // latt = chosenOne.lat + Math.random();
+  //     // lngg = chosenOne.lng + Math.random();
+  //     spreadAlgorithm({ lat: latt, lng: lngg });
+  //   }, 2000);
+  // };
+
+  // useEffect(() => {
+  //   spreadAlgorithm({ lat: 43, lng: 50 });
+  // }, []);
   // const markerList = [
   //   { lat: 43, lng: -80 },
   //   { lat: 43, lng: -90 },
@@ -188,10 +233,11 @@ const Main = () => {
         <Places
           setOffice={(position) => {
             setOffice(position);
-            setLatLngLines([
-              ...latLngLines,
-              [{ ...position }, { lat: 20.7855, lng: 97.036339 }],
-            ]);
+            // setLatLngLines([
+            //   ...latLngLines,
+            //   [{ ...position }, { lat: 20.7855, lng: 97.036339 }],
+            // ]);
+            // spreadAlgorithm(position);
             mapRef.current?.panTo(position);
           }}
         />
@@ -215,6 +261,17 @@ const Main = () => {
                 houses.map(
                   (house) =>
                     house.lat < 20 ? (
+                      // <Marker
+                      //   key={house.lat}
+                      //   position={house}
+                      //   clusterer={clusterer}
+                      //   animation={google.maps.Animation.BOUNCE} // eslint-disable-line
+                      //   icon={"https://robohash.org/sailaminoak.png?size=50x50"}
+                      //   onClick={() => {
+                      //     // fetchDirections(house);
+                      //     setShowInfoWindow(true);
+                      //   }}
+                      // />
                       <Marker
                         key={house.lat}
                         position={house}
@@ -223,19 +280,33 @@ const Main = () => {
                         icon={"https://robohash.org/sailaminoak.png?size=50x50"}
                         onClick={() => {
                           // fetchDirections(house);
+                          setShowInfoWindow(true);
                         }}
-                      />
+                      >
+                        {showInfoWindow && (
+                          <InfoWindow>
+                            <div>This is data in long form</div>
+                          </InfoWindow>
+                        )}
+                      </Marker>
                     ) : (
                       <Marker
                         key={house.lat}
                         position={house}
                         clusterer={clusterer}
                         animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                        icon={"https://robohash.org/sailamin.png?size=50x50"}
+                        icon={"https://robohash.org/sailaminoak.png?size=50x50"}
                         onClick={() => {
                           // fetchDirections(house);
+                          setShowInfoWindow(true);
                         }}
-                      />
+                      >
+                        {showInfoWindow && (
+                          <InfoWindow>
+                            <div>This is data in long form</div>
+                          </InfoWindow>
+                        )}
+                      </Marker>
                     )
                   // <CustomAnimationMarker
                   //   key={house.lat}
@@ -246,7 +317,34 @@ const Main = () => {
                 )
               }
             </MarkerClusterer>
+            <MarkerClusterer>
+              {(clusterer) =>
+                markerList?.map((marker) => (
+                  <Marker
+                    clusterer={clusterer}
+                    key={marker.lat}
+                    position={marker}
+                    animation={google.maps.Animation.BOUNCE} // eslint-disable-line
+                    icon={"https://robohash.org/sainayminoak.png?size=50x50"}
+                    onClick={() => {
+                      // fetchDirections(house);
+                    }}
+                  />
+                ))
+              }
+            </MarkerClusterer>
 
+            {markerList?.map((marker) => (
+              <Marker
+                key={marker.lat}
+                position={marker}
+                animation={google.maps.Animation.DROP} // eslint-disable-line
+                icon={"https://robohash.org/sainayminoak.png?size=50x50"}
+                onClick={() => {
+                  // fetchDirections(house);
+                }}
+              />
+            ))}
             <Circle center={office} radius={3000} options={closeOptions} />
             <Circle center={office} radius={5000} options={middleOptions} />
             <Circle center={office} radius={10000} options={farOptions} />
@@ -312,12 +410,4 @@ const generateHouses = (position) => {
 
 export default Main;
 
-// AIzaSyB9lgD4XyhydLgpwMvTQqDz1oZyOD2uZXM
 
-// AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78
-
-// 5fce16cb83b6e305
-
-// b181cac70f27f5e6
-
-// 5fce16cb83b6e305
