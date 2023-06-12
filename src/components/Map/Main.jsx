@@ -15,6 +15,7 @@ import {
   DirectionsRenderer,
   Polyline,
   InfoWindow,
+  InfoWindowF,
 } from "@react-google-maps/api";
 import "./globals.css";
 import Places from "./places";
@@ -25,6 +26,8 @@ const Main = () => {
   const center = useMemo(() => ({ lat: 20.7855, lng: 97.036339 }), []);
 
   const [mapLoaded, setMapLoaded] = useState(false);
+
+  const [currentInfoWindow, setCurretnInfoWindow] = useState(null);
 
   // const [directions, setDirections] = useState();
   const options = useMemo(
@@ -74,7 +77,7 @@ const Main = () => {
   }, [office]);
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "Your Key",
+    googleMapsApiKey: "AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78",
     libraries: ["places"],
   });
 
@@ -257,64 +260,58 @@ const Main = () => {
           <>
             <Marker position={office} />
             <MarkerClusterer>
-              {(clusterer) =>
-                houses.map(
-                  (house) =>
-                    house.lat < 20 ? (
-                      // <Marker
-                      //   key={house.lat}
-                      //   position={house}
-                      //   clusterer={clusterer}
-                      //   animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                      //   icon={"https://robohash.org/sailaminoak.png?size=50x50"}
-                      //   onClick={() => {
-                      //     // fetchDirections(house);
-                      //     setShowInfoWindow(true);
-                      //   }}
-                      // />
-                      <Marker
-                        key={house.lat}
-                        position={house}
-                        clusterer={clusterer}
-                        animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                        icon={"https://robohash.org/sailaminoak.png?size=50x50"}
-                        onClick={() => {
-                          // fetchDirections(house);
-                          setShowInfoWindow(true);
-                        }}
-                      >
-                        {showInfoWindow && (
-                          <InfoWindow>
-                            <div>This is data in long form</div>
-                          </InfoWindow>
-                        )}
-                      </Marker>
-                    ) : (
-                      <Marker
-                        key={house.lat}
-                        position={house}
-                        clusterer={clusterer}
-                        animation={google.maps.Animation.BOUNCE} // eslint-disable-line
-                        icon={"https://robohash.org/sailaminoak.png?size=50x50"}
-                        onClick={() => {
-                          // fetchDirections(house);
-                          setShowInfoWindow(true);
-                        }}
-                      >
-                        {showInfoWindow && (
-                          <InfoWindow>
-                            <div>This is data in long form</div>
-                          </InfoWindow>
-                        )}
-                      </Marker>
-                    )
-                  // <CustomAnimationMarker
-                  //   key={house.lat}
-                  //   clusterer={clusterer}
-                  //   position={house}
-                  //   map={mapRef.current}
-                  // />
-                )
+              {
+                (clusterer) =>
+                  houses.map((house) => (
+                    // <Marker
+                    //   key={house.lat}
+                    //   position={house}
+                    //   clusterer={clusterer}
+                    //   animation={google.maps.Animation.BOUNCE} // eslint-disable-line
+                    //   icon={"https://robohash.org/sailaminoak.png?size=50x50"}
+                    //   onClick={() => {
+                    //     // fetchDirections(house);
+                    //     setShowInfoWindow(true);
+                    //   }}
+                    // />
+                    <Marker
+                      key={house.lat}
+                      position={house}
+                      clusterer={clusterer}
+                      animation={google.maps.Animation.BOUNCE} // eslint-disable-line
+                      icon={"https://robohash.org/sailaminoak.png?size=50x50"}
+                      onClick={() => {
+                        // fetchDirections(house);
+                        // setShowInfoWindow(true);
+                        setCurretnInfoWindow(house.lat);
+                      }}
+                    >
+                      {currentInfoWindow === house.lat && (
+                        <InfoWindowF
+                          onCloseClick={() => setCurretnInfoWindow(null)}
+                        >
+                          <div className="">
+                            <div>
+                              This is data in long form, and lat is {house.lat}{" "}
+                              and lng is {house.lng}
+                            </div>
+                            <div>
+                              <img
+                                src="https://robohash.org/corona.png?size50x50"
+                                alt="an imge"
+                              />
+                            </div>
+                          </div>
+                        </InfoWindowF>
+                      )}
+                    </Marker>
+                  ))
+                // <CustomAnimationMarker
+                //   key={house.lat}
+                //   clusterer={clusterer}
+                //   position={house}
+                //   map={mapRef.current}
+                // />
               }
             </MarkerClusterer>
             <MarkerClusterer>
@@ -410,4 +407,12 @@ const generateHouses = (position) => {
 
 export default Main;
 
+// AIzaSyB9lgD4XyhydLgpwMvTQqDz1oZyOD2uZXM
 
+// AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78
+
+// 5fce16cb83b6e305
+
+// b181cac70f27f5e6
+
+// 5fce16cb83b6e305
