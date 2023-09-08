@@ -5,18 +5,20 @@ Controllable Table is a table management software. But in this project, I put go
 ### for controllable table
 
 1. You can put your desired objects in the table components. And everything will be handled by software. It is that easy. Give it a try.
+2. https://naypaihtet.netlify.app
 
 ### for google map part
 
 1. You can attack a specific country by typing their names on the combo-box component. After you select a country, you can see some polylines and robots surrounding that country.
+2. https://naypaihtet.netlify.app/map
 
 ### for react-d3-tree
 
 1. Manager-1 is under CEO, but CEO is under board members. Manager-1 has two assistance, and CEO has ......blah blah. With this, you can just see all the relations betweeen everything in tree diagram representation easily.
+2. https://naypaihtet.netlify.app/tree
 
 
-### Current hosting site
-
+### Preview the project
 https://naypaihtet.netlify.app
 
 
